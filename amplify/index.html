@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visit Counter</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #354050;
+        }
+        .counter-container {
+            text-align: center;
+            background-color: #57667a;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .counter-text {
+            font-size: 24px;
+            color: #e1e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="counter-container">
+        <p class="counter-text">This site visited <span id="visit-count">0</span> times.</p>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const apiEndpoint = 'https://api'; //YOUR API ENDPOINT(WHICH ATTACHED TO LAMBDA FUNCTION) HERE
+            
+            function updateVisitCount() {
+                fetch(apiEndpoint)
+                    .then(response => response.json())
+                    .then(data => {
+                        const responseBody = JSON.parse(data.body);
+                        const visitCount = responseBody.amounts;
+                        document.getElementById('visit-count').innerText = visitCount;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching visit count:', error);
+                    });
+            }
+
+            updateVisitCount();
+        });
+
+
+    </script>
+</body>
+</html>
